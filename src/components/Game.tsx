@@ -1,36 +1,75 @@
 import { useState } from 'react';
+//import { useAppDispatch,useAppSelector } from '../app/hooks';
+//import {addHistory} from '../features/game/game-slice'
+//import { useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { ALL_SQUARES, DIMENSIONS } from '../constants/constants';
 import { EGameType } from '../enums/EGameType';
 import { EPlayer } from '../enums/EPlayer';
 import { EPlayerLetter } from '../enums/EPlayerLetter';
+import { changeCurrentMove, changeGameType, changeHistory } from '../features/game/game-slice';
+import { ActionTypes } from '../reducers/ActionTypes';
 import minimax from '../utils/minimax';
 import { calculateWinner, isDraw } from '../utils/utils';
 import Board from './Board';
 import GameType from './GameType';
 import Status from './Status';
 
-import { useAppDispatch,useAppSelector } from '../app/hooks';
-import {addHistory} from '../features/game/game-slice'
 export default function Game() {
-    
-    //const histValue  = useAppSelector((state) => state.history.value);
-    //const histDispatch = useAppDispatch()
+    const history = useAppSelector(state => state.game.history);
+    const currentMove = useAppSelector(state => state.game.currentMove);
+    const gameType = useAppSelector(state => state.game.gameType);
+    const dispatch = useAppDispatch();
 
+    //const currentMove = useAppSelector((state) => state.history)
+    // const histValue  = useAppSelector((state) => state.history.value);
+    // const histDispatch = useAppDispatch()
 
-    const [history, setHistory] = useState([Array(9).fill(null)]);
-    const [currentMove, setCurrentMove] = useState(0);
+    // function handleHistory(newSquares:any[]){
+    //   histDispatch(addHistory(newSquares))
+    // }
+
+    //const dispatch = useDispatch()
+
+    //let history: any[][] = store.getState().history;
+    //let gameType: EGameType = store.getState().gameType;
+    //let currentMove: number = store.getState().currentMove;
+
+    /*store.subscribe(() => {
+        history = store.getState().history;
+        currentMove = store.getState().currentMove;
+        gameType = store.getState().gameType;
+    });*/
+    /*store.subscribe(() => {
+        currentMove = store.getState().currentMove;
+    });
+    let gameType: EGameType = store.getState().gameType;
+    store.subscribe(() => {
+        gameType = store.getState().gameType;
+    });*/
+
+    // const [history, setHistory] = useState([Array(9).fill(null)]);
+    // const [currentMove, setCurrentMove] = useState(0);
     const xIsNext = currentMove % 2 === 0;
     const currentSquares = history[currentMove];
     let isGameOver = false;
     let currentPlayer: EPlayer = EPlayer.Human;
-    const [gameType, setGameType] = useState(EGameType.Two);
+    //const [gameType, setGameType] = useState(EGameType.Two);
 
     function resetGame() {
-        setHistory([Array(9).fill(null)]);
-        setCurrentMove(0);
+        //store.
+        //setHistory([Array(9).fill(null)]);
+        //store.dispatch({ type: ActionTypes.ResetHistory, payload: [] });
+        dispatch(changeHistory([]));
+        //setCurrentMove(0);
+        //store.dispatch({ type: ActionTypes.ChangeCurrentMove, payload: 0 });
+        dispatch(changeCurrentMove(0));
     }
     function onChangeGameType(event: any) {
-        setGameType(event.target.value);
+        //setGameType(event.target.value);
+        //store.dispatch({ type: ActionTypes.SetGameType, payload: event.target.value });
+        dispatch(changeCurrentMove(event.target.value));
+
         resetGame();
     }
 
@@ -55,8 +94,17 @@ export default function Game() {
         }
         nextSquares[bestMove] = EPlayerLetter.O;
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-        setHistory(nextHistory);
-        setCurrentMove(nextHistory.length - 1);
+        //setHistory(nextHistory);
+        //store.dispatch({ type: ActionTypes.AddHistory, payload: nextHistory });
+        dispatch(changeHistory(nextHistory));
+
+        // setCurrentMove(nextHistory.length - 1);
+        /* store.dispatch({
+            type: ActionTypes.ChangeCurrentMove,
+            payload: /* store.getState().history.length -1 history ? history.length - 1 : 0,
+        });*/
+        dispatch(changeCurrentMove(history.length - 1));
+
         currentPlayer = EPlayer.Human;
     }
     const handleSquareOnClickAI = (index: number): void => {
@@ -68,8 +116,17 @@ export default function Game() {
 
         nextSquares[index] = EPlayerLetter.X;
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-        setHistory(nextHistory);
-        setCurrentMove(nextHistory.length - 1);
+        //setHistory(nextHistory);
+        //store.dispatch({ type: ActionTypes.AddHistory, payload: nextHistory });
+        dispatch(changeHistory(nextHistory));
+
+        //setCurrentMove(nextHistory.length - 1);
+        /*store.dispatch({
+            type: ActionTypes.ChangeCurrentMove,
+            payload: /* store.getState().history.length -1  history ? history.length - 1 : 0,
+        });*/
+        dispatch(changeCurrentMove(history.length - 1));
+
         console.log('in handle=nextSquares=', nextSquares);
 
         currentPlayer = EPlayer.AI;
@@ -90,8 +147,14 @@ export default function Game() {
             nextSquares[index] = EPlayerLetter.O;
         }
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-        setHistory(nextHistory);
-        setCurrentMove(nextHistory.length - 1);
+        //setHistory(nextHistory);
+        //store.dispatch({ type: ActionTypes.AddHistory, payload: nextHistory });
+        dispatch(changeHistory(nextHistory));
+
+        // setCurrentMove(nextHistory.length - 1);
+        // store.dispatch({ type: ActionTypes.ChangeCurrentMove, payload: /*store.getState().*/ history ? history.length - 1 : 0 });
+        dispatch(changeCurrentMove(history.length - 1));
+
         console.log('in handle=nextSquares=', nextSquares);
     };
 
@@ -111,7 +174,9 @@ export default function Game() {
     }
 
     function jumpTo(nextMove: number) {
-        setCurrentMove(nextMove);
+        //setCurrentMove(nextMove);
+        // store.dispatch({ type: ActionTypes.ChangeCurrentMove, payload: nextMove });
+        dispatch(changeCurrentMove(nextMove));
     }
 
     const historyMoves = history.map((squares, move) => {

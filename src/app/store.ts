@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import historyReducer from '../features/game/game-slice';
+import gameReducer from '../features/game/game-slice';
 
 export const store = configureStore({
     reducer: {
-        history: historyReducer,
+        game: gameReducer,
     },
 });
 
 export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof store.getState>;

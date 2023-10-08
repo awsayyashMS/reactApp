@@ -1,6 +1,7 @@
 import { WinnerResult } from '../interfaces/WinnerResult';
 
 export function calculateWinner(squares: string[]): WinnerResult | null {
+    if (!squares) return null;
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -24,6 +25,7 @@ export function calculateWinner(squares: string[]): WinnerResult | null {
 }
 
 export function isDraw(squares: string[]): boolean {
+    if (!squares) return false;
     let result = true;
     squares.forEach(element => {
         if (element === null) {
