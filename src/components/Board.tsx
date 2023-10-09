@@ -1,14 +1,22 @@
+import { FC } from 'react';
 import '../App.css';
 import { ALL_SQUARES, DIMENSIONS } from '../constants/constants';
 import Square from './Square';
+import { useAppSelector } from '../app/hooks';
 
 interface Props {
     handleSquareButtonOnClick: (index: number) => void;
-    squares: string[];
+    //squares: string[];
     isGameOver: boolean;
     winnerLine: number[] | undefined;
 }
-export default function Board({ handleSquareButtonOnClick, squares, isGameOver, winnerLine }: Props) {
+export const Board: FC<Props> = ({ handleSquareButtonOnClick, isGameOver, winnerLine }: Props) => {
+
+    const history = useAppSelector(state => state.game.history);
+    const currentMove = useAppSelector(state => state.game.currentMove);
+
+    const currentSquares = history[currentMove];
+
     const mappedSquares = Array(ALL_SQUARES).fill('');
     const boardComponent = Array(DIMENSIONS).fill(null);
     for (let i = 0; i < ALL_SQUARES; i++) {
@@ -20,7 +28,7 @@ export default function Board({ handleSquareButtonOnClick, squares, isGameOver, 
         }
 
         mappedSquares[i] = (
-            <Square handleButtonOnClick={() => handleSquareButtonOnClick(i)} value={squares[i]} isGameOver={chooseIsGameOver} />
+            <Square handleButtonOnClick={() => handleSquareButtonOnClick(i)} value={currentSquares[i]} isGameOver={chooseIsGameOver} />
         );
     }
 
@@ -38,4 +46,4 @@ export default function Board({ handleSquareButtonOnClick, squares, isGameOver, 
     }
 
     return <>{boardComponent}</>;
-}
+};

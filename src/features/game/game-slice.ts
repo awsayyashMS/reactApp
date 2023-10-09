@@ -16,10 +16,20 @@ const gameSlice = createSlice({
     initialState,
     reducers: {
         changeHistory(state, action: PayloadAction<any[]>) {
-            state.history = action.payload;//[...state.history, action.payload];
+            const nextHistory = [...state.history.slice(0, state.currentMove + 1), action.payload /**nextSquares */];
+            state.history = nextHistory; //action.payload; //[...state.history, action.payload];
         },
-        changeCurrentMove(state, action: PayloadAction<number>) {
+        resetHistory(state) {
+            state.history = [Array(9).fill(null)]; //[...state.history, action.payload];
+        },
+        changeCurrentMove(state) {
+            state.currentMove = state.history.length - 1;
+        },
+        changeCurrentMoveToIndex(state, action: PayloadAction<number>) {
             state.currentMove = action.payload;
+        },
+        resetCurrentMove(state) {
+            state.currentMove = 0;
         },
         changeGameType(state, action: PayloadAction<EGameType>) {
             state.gameType = action.payload;
@@ -27,10 +37,11 @@ const gameSlice = createSlice({
     },
 });
 
-export const { changeHistory, changeCurrentMove, changeGameType } = gameSlice.actions;
+export const { changeHistory, changeCurrentMove, changeGameType, resetHistory, resetCurrentMove, changeCurrentMoveToIndex } =
+    gameSlice.actions;
 export const selectGame = (state: RootState) => state.game;
-export const selectGameHistory = (state: RootState) => state.game.history;
-export const selectGameCurrentMove = (state: RootState) => state.game.currentMove;
-export const selectGameType = (state: RootState) => state.game.gameType;
+//export const selectGameHistory = (state: RootState) => state.game.history;
+//export const selectGameCurrentMove = (state: RootState) => state.game.currentMove;
+//export const selectGameType = (state: RootState) => state.game.gameType;
 
 export default gameSlice.reducer;

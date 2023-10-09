@@ -28,7 +28,7 @@ export function isDraw(squares: string[]): boolean {
     if (!squares) return false;
     let result = true;
     squares.forEach(element => {
-        if (element === null) {
+        if (element === null || element === 'null' || element === '') {
             result = false;
             return;
         }
