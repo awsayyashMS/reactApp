@@ -1,49 +1,33 @@
 import { FC } from 'react';
-import '../App.css';
-import { ALL_SQUARES, DIMENSIONS } from '../constants/constants';
+import { DIMENSIONS } from '../constants/constants';
+import { useAppSelector } from '../hooks/hooks';
+import IBoardProps from '../interfaces/IBoardProps';
 import Square from './Square';
-import { useAppSelector } from '../app/hooks';
 
-interface Props {
-    handleSquareButtonOnClick: (index: number) => void;
-    //squares: string[];
-    isGameOver: boolean;
-    winnerLine: number[] | undefined;
-}
-export const Board: FC<Props> = ({ handleSquareButtonOnClick, isGameOver, winnerLine }: Props) => {
-
+export const Board: FC<IBoardProps> = ({ handleSquareButtonOnClick, isGameOver, winnerLine }: IBoardProps) => {
     const history = useAppSelector(state => state.game.history);
     const currentMove = useAppSelector(state => state.game.currentMove);
-
     const currentSquares = history[currentMove];
 
-    const mappedSquares = Array(ALL_SQUARES).fill('');
-    const boardComponent = Array(DIMENSIONS).fill(null);
-    for (let i = 0; i < ALL_SQUARES; i++) {
-        let chooseIsGameOver = false;
-        if (isGameOver) {
-            if (winnerLine?.includes(i)) {
-                chooseIsGameOver = isGameOver;
-            }
-        }
+    const renderSquare = (i: number) => {
+        const chooseIsGameOver: boolean = isGameOver && winnerLine?.includes(i) ? true : false;
+        return <Square key={i} handleButtonOnClick={() => handleSquareButtonOnClick(i)} value={currentSquares[i]} isGameOver={chooseIsGameOver} />;
+    };
 
-        mappedSquares[i] = (
-            <Square handleButtonOnClick={() => handleSquareButtonOnClick(i)} value={currentSquares[i]} isGameOver={chooseIsGameOver} />
-        );
-    }
-
-    let counter = 0;
-    for (let i = 0; i < DIMENSIONS; i++) {
-        // boardComponent[counter] =
-        // <div className="board-row">;
-        //for (let j = 0; j < DIMENSIONS; j++) {
-        boardComponent[counter] = (
-            <div className="board-row">
-                {mappedSquares[counter++]} {mappedSquares[counter++]} {mappedSquares[counter++]}
+    const renderBoardRow = (row: number) => {
+        const squaresInRow: JSX.Element[] = Array(3)
+            .fill(null)
+            .map((_, col) => renderSquare(row * DIMENSIONS + col));
+        return (
+            <div key={row} className="board-row">
+                {squaresInRow}
             </div>
         );
-        //}
-    }
+    };
 
-    return <>{boardComponent}</>;
+    const boardRows = Array(3)
+        .fill(null)
+        .map((_, row) => renderBoardRow(row));
+
+    return <>{boardRows}</>;
 };

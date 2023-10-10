@@ -1,13 +1,9 @@
 import { FC } from 'react';
-import { useAppSelector } from '../app/hooks';
-import { EGameType } from '../enums/EGameType';
+import EGameType from '../enums/EGameType';
+import { useAppSelector } from '../hooks/hooks';
+import IGameTypeProps from '../interfaces/IGameTypeProps';
 
-interface IGameTypeProps {
-    handleRadioOnClick: (event: React.FormEvent<HTMLDivElement>) => void;
-    ///gameType: string;
-}
-
-const GameType: FC<IGameTypeProps> = ({ handleRadioOnClick }) => {
+const GameType: FC<IGameTypeProps> = ({ handleRadioOnClick }: IGameTypeProps) => {
     const gameType: string = useAppSelector(state => state.game.gameType);
 
     return (

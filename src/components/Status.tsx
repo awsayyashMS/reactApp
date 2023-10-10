@@ -1,10 +1,7 @@
-import '../App.css';
+import { FC } from 'react';
+import IStatusProps from '../interfaces/IStatusProps';
 
-interface Props {
-    status: string;
-}
-
-const Status = ({ status }: Props) => {
+const Status: FC<IStatusProps> = ({ status }: IStatusProps) => {
     return <div className="status">{status}</div>;
 };
 

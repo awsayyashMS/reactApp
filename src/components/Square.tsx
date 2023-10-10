@@ -1,14 +1,11 @@
-interface Props {
-    handleButtonOnClick: () => void;
-    value: string;
-    isGameOver: boolean;
-}
+import { FC } from 'react';
+import EGameOverClass from '../enums/EGameOverClass';
+import ISquareProps from '../interfaces/ISquareProps';
 
-const Square = ({ handleButtonOnClick, value, isGameOver }: Props) => {
-    let className = ' ';
-    if (isGameOver) className = ' game-over';
+const Square: FC<ISquareProps> = ({ handleButtonOnClick, value, isGameOver }: ISquareProps) => {
+    const className = isGameOver ? EGameOverClass.GAME_OVER : '';
     return (
-        <button className={'square' + className} onClick={handleButtonOnClick} color="white">
+        <button className={'square ' + className} onClick={handleButtonOnClick} color="white">
             {value}
         </button>
     );
