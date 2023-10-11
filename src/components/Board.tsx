@@ -11,7 +11,14 @@ export const Board: FC<IBoardProps> = ({ handleSquareButtonOnClick, isGameOver, 
 
     const renderSquare = (i: number) => {
         const chooseIsGameOver: boolean = isGameOver && winnerLine?.includes(i) ? true : false;
-        return <Square key={i} handleButtonOnClick={() => handleSquareButtonOnClick(i)} value={currentSquares[i]} isGameOver={chooseIsGameOver} />;
+        return (
+            <Square
+                key={i}
+                handleButtonOnClick={() => handleSquareButtonOnClick(i)}
+                value={currentSquares[i]}
+                isGameOver={chooseIsGameOver}
+            />
+        );
     };
 
     const renderBoardRow = (row: number) => {

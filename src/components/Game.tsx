@@ -14,8 +14,8 @@ import IWinnerResult from '../interfaces/IWinnerResult';
 import { aiMove, calculateStatus, calculateWinner } from '../utils/utils';
 import { Board } from './Board';
 import GameType from './GameType';
-import Status from './Status';
 import History from './History';
+import Status from './Status';
 
 export default function Game() {
     const history = useAppSelector(state => state.game.history);
